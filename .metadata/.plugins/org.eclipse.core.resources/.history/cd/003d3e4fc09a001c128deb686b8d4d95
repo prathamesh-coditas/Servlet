@@ -1,0 +1,16 @@
+package com.add;
+
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponce;
+
+
+public class AddServlet extends HttpServlet {
+	public void service(HttpServletRequest req,HttpServletResponce res) {
+		int i=Integer.parseInt(reg.getParameter("num1"));
+		int j=Integer.parseInt(reg.getParameter("num2"));
+		int k=i+j;
+		System.out.println("Result is: "+k);
+	}
+
+}
