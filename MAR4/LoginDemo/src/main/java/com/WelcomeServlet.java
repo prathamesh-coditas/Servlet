@@ -1,0 +1,91 @@
+package com;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ * Servlet implementation class WelcomeServlet
+ */
+//@WebServlet("/WelcomeServlet")
+public class WelcomeServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public WelcomeServlet() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+			response.setContentType("text/html");
+			ServletConfig config=getServletConfig();
+			String pn=config.getInitParameter("pagename1");
+			
+			String k=(String)request.getAttribute("j");
+		    Cookie ck[]=request.getCookies();  
+			PrintWriter out= response.getWriter();
+			String name=request.getParameter("uname");
+			out.print("<h1><center>"+pn+"</center></h1><br>");
+			out.println("<center>"+"This is Welcome page UserName: "+ck[0].getValue()+"</center>");
+			out.println("<br><br>");
+			out.println("<center>This is Employee Data from DB</center><br><br>");
+			try 
+	        {  
+				ServletContext context=getServletContext();
+				try {
+	            Class.forName(context.getInitParameter("driver")); 
+	            Connection con = DriverManager.getConnection(context.getInitParameter("url"),context.getInitParameter("username"),context.getInitParameter("password"));  
+	            Statement stmt = con.createStatement();  
+	            ResultSet rs = stmt.executeQuery("select * from employee");  
+	            out.println("<center>");
+	            out.println("<table border=1 width=50% height=50%>");  
+	            out.println("<tr><th>EmpId</th><th>EmpName</th><th>Salary</th><tr>");  
+	            while (rs.next()) 
+	            {  
+	                String n = rs.getString("empid");  
+	                String nm = rs.getString("empname");  
+	                int s = rs.getInt("sal");   
+	                out.println("<tr><td>" + n + "</td><td>" + nm + "</td><td>" + s + "</td></tr>");   
+	            }  
+	            out.println("</table></center>");  
+	            out.println("</html></body>");  
+	            con.close();  
+	           } 
+				catch(Exception e) {
+	        	   out.println("Unable to load Driver");
+	        	   }
+	           }
+	            catch (Exception e) 
+	           {  
+	            out.println("error");  
+	        }  
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		doGet(request, response);
+	}
+
+}
