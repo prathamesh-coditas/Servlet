@@ -1,0 +1,2 @@
+Aditya Recuirement:
+display data from JDBC.
